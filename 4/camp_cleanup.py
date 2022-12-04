@@ -20,4 +20,6 @@ allSectionPairs = loadSectionAssignmentSetPairs(getFileName())
 #print(allSectionPairs)
 isSectionContained = [sections[0].issubset(sections[1]) or sections[1].issubset(sections[0]) for sections in allSectionPairs]
 #print(isSectionContained)
-print(sum(isSectionContained))
+print(f"Complete overlap: {sum(isSectionContained)}")
+isOverlap = [not sections[0].isdisjoint(sections[1]) for sections in allSectionPairs]
+print(f"Any overlap: {sum(isOverlap)}")
