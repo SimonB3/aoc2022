@@ -29,9 +29,7 @@ def handleLs(addSizeToDirectory, currentDirectories, directoriesAndSizes, result
 
 rawtextString = loadRawData(getFileName())
 commandSplittedData = rawtextString.split('$ ')[1:]
-print(commandSplittedData)
 commandResultPairs = [commandResult.split('\n', 1) for commandResult in commandSplittedData]
-print(commandResultPairs)
 
 currentDirectories = []
 directoriesAndSizes = {}
@@ -47,3 +45,12 @@ for command, result in commandResultPairs:
         handleLs(addSizeToDirectory, currentDirectories, directoriesAndSizes, result)
         
 print(sum([directorySize for directorySize in directoriesAndSizes.values() if directorySize <= 100000]))
+
+available_space = 70000000
+required_space = 30000000
+current_used = directoriesAndSizes['/']
+current_free = available_space - current_used
+needed_free = required_space - current_free
+
+directoriesAndSizesThatFreeEnough = {directory:size for (directory, size) in directoriesAndSizes.items() if size >= needed_free}
+print(min(directoriesAndSizesThatFreeEnough.values()))
