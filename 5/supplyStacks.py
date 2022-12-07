@@ -35,9 +35,10 @@ def parseMove(moveString):
     return (numberOfCrates, startStack, targetStack)
 
 def makeMove(stacks, move):
-    for movenumber in range(int(move[0])):
-        crateToMove = stacks[move[1]].pop(-1)
-        stacks[move[2]].append(crateToMove)
+    numberToMove = int(move[0])
+    cratesToMove = stacks[move[1]][-(numberToMove):]
+    del stacks[move[1]][-(numberToMove):]
+    stacks[move[2]].extend(cratesToMove)
 
 rawInputData = loadRawData(getFileName())
 (stacksData, moveData) = rawInputData.split('\n\n')
