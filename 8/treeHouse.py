@@ -30,8 +30,23 @@ def visibleInList(inputlist):
             isVisible.append(False)
     return isVisible
 
+def singleDirectionViewingDistance(row, viewheight):
+    score = 0
+    for treeheight in row:
+        score += 1
+        if treeheight >= viewheight:
+            break
+    return score
+
+def scenicScore(treeArray, row, column):
+    viewHeight = treeArray[row, column]
+    viewDistanceRight = singleDirectionViewingDistance(treeArray[row, column+1:], viewHeight)
+    viewDistanceLeft = singleDirectionViewingDistance(np.flip(treeArray[row, :column]), viewHeight)
+    viewDistanceUp = singleDirectionViewingDistance(np.flip(treeArray[:row, column]), viewHeight)
+    viewDistanceDown = singleDirectionViewingDistance(treeArray[row+1:, column], viewHeight)
+    return viewDistanceLeft * viewDistanceRight * viewDistanceUp * viewDistanceDown
+
 treeArray = loadNumpyArray(getFileName())
-print(treeArray)
 
 visibleFromLeft = np.apply_along_axis(visibleInList, 1, treeArray)
 visibleFromRight = np.fliplr(np.apply_along_axis(visibleInList, 1, np.fliplr(treeArray)))
@@ -40,6 +55,5 @@ visibleFromBottom = np.flipud(np.apply_along_axis(visibleInList, 0, np.flipud(tr
 
 visibleFromAnyDirection = np.logical_or(np.logical_or(visibleFromLeft, visibleFromRight), np.logical_or(visibleFromTop, visibleFromBottom))
 
-print(visibleFromAnyDirection)
-
 print(np.count_nonzero(visibleFromAnyDirection))
+print(max([scenicScore(treeArray, indices[0][0], indices[0][1]) for indices in np.ndenumerate(treeArray)]))
