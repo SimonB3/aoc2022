@@ -16,7 +16,6 @@ def getFileName():
     return filename
 
 operations = loadOperations(getFileName())
-print(operations)
 
 registerValues = [1]
 for operation in operations:
@@ -24,12 +23,18 @@ for operation in operations:
     if operation[0] == 'addx':
         registerValues.append(registerValues[-1]+int(operation[1]))
 
-print(registerValues)
 signalStrength = 0
 for index, regvalue in enumerate(registerValues):
     if (index-19) % 40 == 0:
-        print(f"{index+1}:{regvalue}:{(index + 1)*regvalue}")
         signalStrength += (index+1)*regvalue
 
-print(signalStrength)
-    
+pixels = ''
+for pixelnumber, regvalue in enumerate(registerValues):
+    rowpixel = pixelnumber % 40
+    if (regvalue - rowpixel >= -1 and regvalue - rowpixel <= 1):
+        pixels+='#'
+    else:
+        pixels+='.'
+
+for rownum in range(6):
+    print(pixels[rownum*40:rownum*40+39])
