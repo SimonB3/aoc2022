@@ -38,7 +38,7 @@ class Monkey:
 
     def determineThrow(self, thing):
         old = thing
-        newValue = eval(compile(self.operation, '', mode='eval'))//3
+        newValue = eval(compile(self.operation, '', mode='eval')) % self.pod
         self.inspectedItems += 1
         if (newValue % self.divisibility) == 0:
             target = self.trueTarget
@@ -58,7 +58,6 @@ def loadMonkeys(filename):
     
     for monkeyData in re.split('Monkey .:\n', fullFile)[1:]:
             currentMonkey = Monkey(monkeyData)
-            print(currentMonkey)
             monkeyList.append(currentMonkey)
     return monkeyList
 
@@ -70,8 +69,13 @@ def getFileName():
     return filename
 
 allMonkeydata = loadMonkeys(getFileName())
+productOfDivisibles = np.prod([monkey.divisibility for monkey in allMonkeydata])
+for monkey in allMonkeydata:
+    monkey.pod = productOfDivisibles
 
-for round in range(20):
+for round in range(10000):
+    if (round % 1000 == 0):
+        print(round)
     for monkey in allMonkeydata:
         thrownthings = monkey.throwThings()
         for (target, item) in thrownthings:
